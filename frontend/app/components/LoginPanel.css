@@ -1,0 +1,246 @@
+  /*credit: 
+  https://www.youtube.com/watch?v=PlpM2LJWu-s
+  https://www.youtube.com/watch?v=hlwlM4a5rxg
+  */
+
+  #loginPage {
+    /* background: linear-gradient(to right, #e2e2e2, #c9d6ff); */
+    background: url("testImage.png") no-repeat;
+    background-size: cover;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: #3c3d3f;
+    text-align: left;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .header_btn {
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  footer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .hidden {
+    visibility: hidden;
+  }
+  
+  #error_box {
+    color: red;
+    visibility: hidden;
+  }
+  
+  #error_box::before {
+    content: "Error: ";
+  }
+
+ .container {
+    position: relative;
+    overflow: hidden;
+    width: 700px;
+    max-width: 100%;
+    min-height: 400px;
+    overflow: hidden;
+    
+    box-shadow: 0 0 10px #ffffff;
+    margin-top: 20px;
+    border-radius: 10px;
+
+    /* border: 1px solid #ffffff; */
+    backdrop-filter: blur(20px);
+
+    padding: 20px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+ }
+
+ .forgetlink{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    color: #eee;
+ }
+  
+ .complex_form {
+    height: 100%;
+    top: 0;
+    position: absolute;
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #login {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+  }
+
+  .container.active #login{
+    transform: translateX(100%);
+    animation: movelogin 0.5s;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  @keyframes movelogin{
+    0%, 49.99%{
+        opacity: 1;
+        z-index: 2;
+    }
+    50%, 100%{
+        opacity: 0;
+        z-index: 1;
+    }
+  }
+
+  #signup{
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .container.active #signup{
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.5s;
+  }
+
+  @keyframes move{
+    0%, 49.99%{
+        opacity: 0;
+        z-index: 1;
+        
+    }
+    50%, 100%{
+        opacity: 1;
+        z-index: 5;
+    }
+  }
+
+  .toggle_container{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    justify-content: center;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .container.active .toggle_container{
+    transform: translateX(-100%);
+  }
+
+  .toggle{
+    /* background: linear-gradient(to right, #b7d474, #94A684); */
+    background-color: #E4E4D0;
+    height: 100%;
+    left: -100%;
+    color: #94A684;
+    position: relative;
+    align-items: center;
+    width: 200%;
+    transform: translate(0);
+    transition: all 0.5s, ease-in-out;
+  }
+
+
+  .container.active .toggle{
+    transform: translate(50%);
+  }
+
+  .toggle_panel {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transform: translateX(0);
+    transition: all 0.5s ease-in-out;
+  }
+
+  .toggle_left{
+    transform: translateX(-200%);
+  }
+
+  .toggle_right{
+    right: 0;
+    transform: translateX(0);
+  }
+
+  .container.active .toggle_left{
+    transform: translateX(0);
+  }
+
+  .container.active .toggle_right{
+    transform: translateX(200%);
+  }
+  
+  .complex_form .form_title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    padding: 10px 0px 10px 0px;
+    color: #E4E4D0;
+  }
+  
+  .complex_form .form_radio {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .complex_form .form_element {
+    background-color: #eee;
+    border: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 5px 10px 5px 10px;
+    width: 65%;
+  }
+  
+  .btn {
+    border-radius: 30px;
+    text-align: center;
+    font-size: 20px;
+    color: #3c3d3f;
+    background-color: #94A684;
+    border: 0px;
+    padding: 10px 20px 10px 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+  
+  .btn:hover {
+    background: #3c3d3f;
+    color: #ffffff;
+  }

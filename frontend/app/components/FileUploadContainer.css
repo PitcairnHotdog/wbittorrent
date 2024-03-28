@@ -1,0 +1,33 @@
+.drag-box{
+    height: 200px;
+    border-radius: 5px;
+    border: 2px dashed rgb(0, 140, 255);
+    color: rgb(0, 140, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(229, 233, 236);
+    flex-direction: column;
+}
+
+#file-input {
+    display: none;
+  }
+
+.textinput-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+#file-description {
+    margin-top: 10px;
+}
+  
+
+
+label :hover{
+    color: darken(rgb(0, 140, 255), 20%);
+    text-decoration: underline;
+}
+  

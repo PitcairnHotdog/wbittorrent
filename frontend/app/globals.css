@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  background-color: #E4E4D0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
