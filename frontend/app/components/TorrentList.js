@@ -140,21 +140,16 @@ const FileRow = (props) => {
 }
 
 export default function TorrentList(props) {
-  const { FileInfos } = props
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - FileInfos.length) : 0;
+  const { page, setPage, rowsPerPage, setRowsPerPage, totalCount } = props;
+  const FileInfos = props.FileInfos || [];
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+      setPage(newPage + 1);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(1);
   };
 
   return (
@@ -168,43 +163,26 @@ export default function TorrentList(props) {
     }}>
       <h2>Public Hashlink</h2>
       <Table sx={{ maxWidth: "80%" }} aria-label="custom pagination table">
-        <TableBody>
-          {(rowsPerPage > 0
-            ? FileInfos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : FileInfos
-          ).map((FileInfo, index) => (
-            <>
-                <FileRow key={index} FileInfo={FileInfo} />
-            </>
-            
-          ))}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 68 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
-              count={FileInfos.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  'aria-label': 'rows per page',
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
-      </Table>
+                <TableBody>
+                    {FileInfos.map((FileInfo, index) => (
+                        <FileRow key={index} FileInfo={FileInfo} />
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            colSpan={3}
+                            count={totalCount}
+                            rowsPerPage={rowsPerPage}
+                            page={page - 1} // Adjust for zero-based indexing expected by TablePagination
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            ActionsComponent={TablePaginationActions}
+                        />
+                    </TableRow>
+                </TableFooter>
+            </Table>
     </TableContainer>
   );
 }

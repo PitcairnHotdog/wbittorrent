@@ -70,11 +70,11 @@ export async function dbRetrieveDirectory(id) {
   }
 }
 
-export async function dbGetDirectoriesPaginated(page) {
+export async function dbGetDirectoriesPaginated(page, limit) {
   try {
-    const limit = 100;
     const fileList = await FileDirectoryModel.find({ isPrivate: false }).select("_id title description").skip((page - 1) * limit).limit(limit).exec();
-    return { status: 200, message: "success", data: fileList};
+    const totalCount = await FileDirectoryModel.countDocuments({ isPrivate: false }).exec();
+    return { status: 200, message: "success", data: fileList, totalCount: totalCount};
   } catch (e) {
     console.log(e);
     return { status: 500, message: "database error" };

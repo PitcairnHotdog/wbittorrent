@@ -72,10 +72,10 @@ export const getUserProgress = (userId) =>
       response.json().then((data) => data.data)
     );
 
-export const getAllDirectory = (page=1) =>
-  request.get(`/files/directory-list?page=${page}`)
-    .then((response) => 
-      response.json().then((data) => data.data)
+export const getAllDirectory = (page = 1, limit = 10) =>
+  request.get(`/files/directory-list?page=${page}&limit=${limit}`)
+    .then(response => 
+      response.json().then(data => ({ data: data.data, totalCount: data.totalCount }))
     );
 
 export const getUserFavourite = (page=1) =>

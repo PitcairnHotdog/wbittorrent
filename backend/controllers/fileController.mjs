@@ -37,7 +37,7 @@ export async function retrieveDiretory(req, res, next) {
 }
 
 export async function getDirectoriesPaginated(req, res, next) {
-  const dbResponse = await dbGetDirectoriesPaginated(req.query.page);
-  if (dbResponse.status === 200) return res.status(200).json({ message: dbResponse.message, data: dbResponse.data });
+  const dbResponse = await dbGetDirectoriesPaginated(req.query.page, req.query.limit);
+  if (dbResponse.status === 200) return res.status(200).json({ message: dbResponse.message, data: dbResponse.data, totalCount: dbResponse.totalCount });
   else return res.status(dbResponse.status).json({ error: dbResponse.message });
 }
