@@ -121,7 +121,7 @@ const getFileHash = (file) =>
     worker.postMessage({ action: 'hash', file, chunkSize });
   });
 
-  const createTorrent = (title, description, files) =>
+  const createTorrent = (title, description, files, isPrivate) =>
     Promise.all(files.map(file =>
       getFileHash(file).then(hash => ({
         hash,
@@ -132,10 +132,10 @@ const getFileHash = (file) =>
         path: file.webkitRelativePath.split('/')
       }))
     )).then(directory =>
-      uploadDirectory(title, description, directory).then(id => {
-        torrentsInfo.set(id, {title, description, directory});
-        console.info(torrentsInfo); // Keep the logging
-        return id; // Ensure we return the id for further use
+      uploadDirectory(title, description, directory, isPrivate).then(id => {
+        torrentsInfo.set(id, {title, description, directory, isPrivate});
+        console.info(torrentsInfo);
+        return id;
       })
     );
 
@@ -206,18 +206,17 @@ const handleSend = (info, data) => {
 }
 
 // Initialize user Torrent
-const generateTorrent = (title, description, _files, onTorrentCreated) => {
+const generateTorrent = (title, description, _files, isPrivate, onTorrentCreated) => {
   if (!_files || _files.length === 0) return;
   const files = Array.from(_files);
-  console.log(files); // Keep the original console.log
-  // Assume fileStorage is available in this scope
-  console.log(fileStorage); // Keep the original console.log
+  console.log(files);
+  console.log(fileStorage);
   
-  createTorrent(title, description, files)
+  createTorrent(title, description, files, isPrivate)
     .then(torrentId => {
-      updateFilesMap(userId); // Update based on your existing logic
+      updateFilesMap(userId);
       if (onTorrentCreated) {
-        onTorrentCreated(torrentId); // Call the callback with the torrent ID
+        onTorrentCreated(torrentId);
       }
     });
 }

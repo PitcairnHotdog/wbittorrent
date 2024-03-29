@@ -11,6 +11,10 @@ const fileDirectorySchema = new Schema(
       type: String,
       required: false
     },
+    isPrivate: {
+      type: Boolean,
+      required: true
+    },
     directory: [
       {
         hash: {
@@ -69,7 +73,7 @@ export async function dbRetrieveDirectory(id) {
 export async function dbGetDirectoriesPaginated(page) {
   try {
     const limit = 100;
-    const fileList = await FileDirectoryModel.find().select("_id title description").skip((page - 1) * limit).limit(limit).exec();
+    const fileList = await FileDirectoryModel.find({ isPrivate: false }).select("_id title description").skip((page - 1) * limit).limit(limit).exec();
     return { status: 200, message: "success", data: fileList};
   } catch (e) {
     console.log(e);

@@ -30,16 +30,10 @@ export default function seedDetail( {params} ){
         console.error("Failed to fetch user progress:", error);
         });
     };
-
-    // Call the function immediately to get the initial progress
     fetchProgress();
-
-    // Set up an interval to fetch the progress every half second
-    const intervalId = setInterval(fetchProgress, 500); // 500 milliseconds
-
-    // Clean up the interval on component unmount
+    const intervalId = setInterval(fetchProgress, 500);
     return () => clearInterval(intervalId);
-  }, [userId]); // Re-run the effect if the userId changes
+  }, [userId]);
 
 
 
@@ -67,18 +61,18 @@ export default function seedDetail( {params} ){
               {(!fileMap || Object.keys(fileMap).length === 0 || (Object.keys(fileMap).length === 1 && fileMap.total !== undefined)) ? (
                 <Typography>No file progress data available.</Typography>
               ) : (
-                Object.entries(fileMap).map(([fileHash, downloadPercentage]) => (
+                Object.entries(fileMap).map(([fileHash, progressInfo]) => (
                   fileHash === "total" ? (
-                    <Typography key={fileHash}><strong>Total Progress:</strong> {(downloadPercentage * 100).toFixed(2)}%</Typography>
+                    <Typography key={fileHash}><strong>Total Progress:</strong> {(progressInfo * 100).toFixed(2)}%</Typography>
                   ) : (
                     <Accordion key={fileHash}>
                       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>File {fileHash}: {(downloadPercentage * 100).toFixed(2)}%</Typography>
+                        <Typography>File {progressInfo.name}: {(progressInfo.progress * 100).toFixed(2)}%</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <CircularProgress variant="determinate" value={downloadPercentage * 100} sx={{ mr: 2 }}/>
-                          <Typography>{(downloadPercentage * 100).toFixed(2)}% downloaded</Typography>
+                          <CircularProgress variant="determinate" value={progressInfo.progress * 100} sx={{ mr: 2 }}/>
+                          <Typography>{(progressInfo.progress * 100).toFixed(2)}% downloaded</Typography>
                         </Box>
                       </AccordionDetails>
                     </Accordion>

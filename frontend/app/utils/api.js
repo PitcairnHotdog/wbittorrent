@@ -29,11 +29,12 @@ export const uploadHashs = (fileHash) =>
     block_hash: fileHash.chunkHashs
   });
 
-export const uploadDirectory = (title, description, directory) =>
+export const uploadDirectory = (title, description, directory, isPrivate) =>
   request.post(`/files/directory/`, {
     title,
     description,
-    directory
+    directory,
+    isPrivate
   }).then((response) => 
     response.json().then((data) => data.data.id)
   );

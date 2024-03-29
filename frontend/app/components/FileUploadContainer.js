@@ -7,21 +7,23 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import "./FileUploadContainer.css";
 import PeerContext from '@/app/components/PeerContext';
 
 export default function FileUploadContainer() {
     const { generateTorrent } = useContext(PeerContext);
-    const [files, setFiles] = useState(null); // Use this for both single and multiple files
+    const [files, setFiles] = useState(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [torrentId, setTorrentId] = useState(""); // To store the torrent ID after upload
-    const directoryInputRef = useRef(); // Reference for directory input
-    const fileInputRef = useRef(); // Reference for single file input
+    const [isPrivate, setIsPrivate] = useState(false);
+    const [torrentId, setTorrentId] = useState("");
+    const directoryInputRef = useRef();
+    const fileInputRef = useRef();
 
     const handleUpload = () => {
-        // Assuming generateTorrent can handle both single and multiple files the same way
-        generateTorrent(title, description, files, setTorrentId);
+        generateTorrent(title, description, files, isPrivate, setTorrentId);
     };
 
     return (
@@ -44,18 +46,16 @@ export default function FileUploadContainer() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
-                {/* Single file upload input */}
                 <input 
                     name="file" 
                     type="file" 
                     className='file' 
                     id="file-input" 
-                    onChange={(e) => setFiles(e.target.files)} // Adapted for single or multiple files
+                    onChange={(e) => setFiles(e.target.files)}
                     hidden
                     ref={fileInputRef}
                 />
                 <Button size="small" onClick={() => fileInputRef.current.click()}>Select File</Button>
-                {/* Directory upload input */}
                 <input 
                     name="directory" 
                     type="file" 
@@ -64,10 +64,16 @@ export default function FileUploadContainer() {
                     onChange={(e) => setFiles(e.target.files)}
                     hidden
                     webkitdirectory="true"
-                    multiple // Allows multiple file selection
+                    multiple
                     ref={directoryInputRef}
                 />
                 <Button size="small" onClick={() => directoryInputRef.current.click()}>Select Directory</Button>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginTop: 2 }}>
+                    <FormControlLabel
+                        control={<Checkbox checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} />}
+                        label="Share Privately"
+                    />
+                </Box>
                 {files && files.length > 0 && (
                     <Box sx={{ mt: 2 }}>
                         <Typography variant="subtitle1">Selected Files:</Typography>
@@ -88,7 +94,7 @@ export default function FileUploadContainer() {
             </CardActions>
             {torrentId && (
                 <CardContent>
-                    <Typography>Torrent ID: {torrentId}</Typography>
+                    <Typography>Shared successfully! Torrent ID: {torrentId}</Typography>
                 </CardContent>
             )}
         </Card>

@@ -39,7 +39,7 @@ export async function getDownloadProgress(req, res, next) {
       const downloadedBlockList = await dbBlockPossessionGet(uploader, file.hash);
       if (downloadedBlockList.status === 404) return res.status(404).json({ message: downloadedBlockList.message });
       const downloadedPercentage = downloadedBlockList.data.length / fileInfo.data.block_count;
-      fileMap[file.hash] = downloadedPercentage;
+      fileMap[file.hash] = { "progress": downloadedPercentage, "name": file.name };
       totalBlockCount += fileInfo.data.block_count;
       totalDownloadedBlock += downloadedBlockList.data.length;
     }
