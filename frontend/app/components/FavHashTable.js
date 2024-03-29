@@ -101,7 +101,7 @@ const FileRow = (props) => {
                 </IconButton>
               </TableCell>
               <TableCell component="th" scope="row">
-                <Link href={"/Seeds/" + FileInfo._id}>
+                <Link href={"/Downloads/" + FileInfo._id}>
                 {FileInfo.title}
                 </Link>
               </TableCell>

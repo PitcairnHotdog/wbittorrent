@@ -6,7 +6,7 @@ import {AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, B
 import MenuIcon from '@mui/icons-material/Menu';
 import PeerContext from '@/app/components/PeerContext';
 
-const pages = ['Home', 'Torrents', 'Seeds', 'Search'];
+const pages = ['Home', 'Torrents', 'Downloads', 'Search'];
 const settings = ['Dashboard', 'Login'];
 
 const stringToColor = (string) => {

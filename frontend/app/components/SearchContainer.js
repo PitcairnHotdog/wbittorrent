@@ -52,7 +52,7 @@ export default function SearchContainer({ onSearch }) {
         {searchResult && (
           <>
             <Box sx={{ marginY: 2 }}>
-              <Link href={"/Seeds/" + searchResult._id}>
+              <Link href={"/Downloads/" + searchResult._id}>
                 <Typography variant="h6" component="div" sx={{ cursor: 'pointer' }}>{searchResult.title}</Typography>
               </Link>
               <FavBtn />

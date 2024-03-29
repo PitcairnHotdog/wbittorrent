@@ -7,7 +7,7 @@
 // a.click();
 // console.log(fullBlob);
 
-export default function Seeds() {
+export default function Downloads() {
   return (
     <></>
   )
