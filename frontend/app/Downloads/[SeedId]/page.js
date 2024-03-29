@@ -1,6 +1,5 @@
 'use client'
-import { useState, useEffect, useContext  } from "react"
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react';
 import PeerContext from '@/app/components/PeerContext';
 import { getUserProgress } from "@/app/utils/api";
 import Box from '@mui/material/Box';
@@ -9,12 +8,11 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CircularProgress from "@mui/material/CircularProgress";
 import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary"
-import AccordionDetails from "@mui/material/AccordionDetails"
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-
-export default function seedDetail( {params} ){
+export default function SeedDetail({ params }) {
   const { userId } = useContext(PeerContext);
   const { downloadTorrent } = useContext(PeerContext);
 
@@ -22,21 +20,19 @@ export default function seedDetail( {params} ){
 
   useEffect(() => {
     const fetchProgress = () => {
-    getUserProgress(userId)
+      getUserProgress(userId)
         .then(progressData => {
-        setProgress(progressData);
+          setProgress(progressData);
         })
         .catch(error => {
-        console.error("Failed to fetch user progress:", error);
+          console.error("Failed to fetch user progress:", error);
         });
     };
+
     fetchProgress();
-    const intervalId = setInterval(fetchProgress, 500);
+    const intervalId = setInterval(fetchProgress, 500); // Update progress every 500ms
     return () => clearInterval(intervalId);
   }, [userId]);
-
-
-
 
   useEffect(() => {
     downloadTorrent(params.SeedId);
@@ -50,38 +46,30 @@ export default function seedDetail( {params} ){
       </Box>
     );
   }
-  
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h5" gutterBottom>Download Progress</Typography>
-        {Object.entries(progress).map(([torrentId, fileMap]) => (
-          <Card key={torrentId} sx={{ mb: 2 }}>
-            <CardContent>
-              <Typography variant="h6">Torrent ID: {torrentId}</Typography>
-              {(!fileMap || Object.keys(fileMap).length === 0 || (Object.keys(fileMap).length === 1 && fileMap.total !== undefined)) ? (
-                <Typography>No file progress data available.</Typography>
-              ) : (
-                Object.entries(fileMap).map(([fileHash, progressInfo]) => (
-                  fileHash === "total" ? (
-                    <Typography key={fileHash}><strong>Total Progress:</strong> {(progressInfo * 100).toFixed(2)}%</Typography>
-                  ) : (
-                    <Accordion key={fileHash}>
-                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>File {progressInfo.name}: {(progressInfo.progress * 100).toFixed(2)}%</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <CircularProgress variant="determinate" value={progressInfo.progress * 100} sx={{ mr: 2 }}/>
-                          <Typography>{(progressInfo.progress * 100).toFixed(2)}% downloaded</Typography>
-                        </Box>
-                      </AccordionDetails>
-                    </Accordion>
-                  )
-                ))
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
-    );
+
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h5" gutterBottom>Download Progress</Typography>
+      {Object.entries(progress).map(([torrentId, torrentProgress]) => (
+        <Accordion key={torrentId} sx={{ mb: 2 }}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+              <Typography variant="h6" sx={{ mr: 2 }}>Torrent ID: {torrentId}</Typography>
+              <CircularProgress variant="determinate" value={torrentProgress.total * 100} size={30} />
+              <Typography sx={{ ml: 2 }}>{(torrentProgress.total * 100).toFixed(2)}%</Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            {Object.entries(torrentProgress).filter(([key]) => key !== "total").map(([fileHash, fileInfo]) => (
+              <Box key={fileHash} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography sx={{ flexGrow: 1 }}>File {fileInfo.name}</Typography>
+                <CircularProgress variant="determinate" value={fileInfo.progress * 100} size={20} />
+                <Typography sx={{ ml: 2 }}>{(fileInfo.progress * 100).toFixed(2)}%</Typography>
+              </Box>
+            ))}
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Box>
+  );
 }
