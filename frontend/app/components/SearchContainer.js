@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { getDirectory } from '@/app/utils/api';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Grid from '@mui/material/Grid';
 
 const FavBtn = () => {
   const [fav, setFav] = useState(false);
@@ -50,29 +51,29 @@ export default function SearchContainer({ onSearch }) {
         />
         <Button size="small" onClick={handleSearch}>Search</Button>
         {searchResult && (
-          <>
-            <Box sx={{ marginY: 2 }}>
-              <Link href={"/Downloads/" + searchResult._id}>
-                <Typography variant="h6" component="div" sx={{ cursor: 'pointer' }}>{searchResult.title}</Typography>
-              </Link>
-              <FavBtn />
-              <IconButton
-                aria-label="expand row"
-                size="small"
-                onClick={() => setOpen(!open)}
-              >
-                {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-              </IconButton>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <Box sx={{ margin: 1 }}>
-                  <Typography variant="body1" gutterBottom>
-                    {searchResult.description}
-                  </Typography>
-                  <Typography variant="body2">{searchResult._id}</Typography>
-                </Box>
-              </Collapse>
-            </Box>
-          </>
+          <Box sx={{ width: "100%", mt: 2 }}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={10}>
+                <Link href={"/Downloads/" + searchResult._id} passHref>
+                  <Typography variant="h6" component="a" sx={{ textDecoration: 'none', cursor: 'pointer' }}>{searchResult.title}</Typography>
+                </Link>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Box sx={{ mt: 1 }}>
+                    <Typography variant="body1">{searchResult.description}</Typography>
+                  </Box>
+                </Collapse>
+              </Grid>
+              <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <FavBtn />
+                <IconButton
+                  aria-label="expand row"
+                  onClick={() => setOpen(!open)}
+                >
+                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Box>
         )}
       </CardContent>
     </Card>
