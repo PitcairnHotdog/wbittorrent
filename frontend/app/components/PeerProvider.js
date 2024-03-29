@@ -121,24 +121,23 @@ const getFileHash = (file) =>
     worker.postMessage({ action: 'hash', file, chunkSize });
   });
 
-const createTorrent = (title, description, files) =>
-  Promise.all(files.map(file =>
-    getFileHash(file).then((hash) =>
-      ({
+  const createTorrent = (title, description, files) =>
+    Promise.all(files.map(file =>
+      getFileHash(file).then(hash => ({
         hash,
         lastModified: file.lastModified,
         name: file.name,
         size: file.size,
         type: file.type,
         path: file.webkitRelativePath.split('/')
+      }))
+    )).then(directory =>
+      uploadDirectory(title, description, directory).then(id => {
+        torrentsInfo.set(id, {title, description, directory});
+        console.info(torrentsInfo); // Keep the logging
+        return id; // Ensure we return the id for further use
       })
-    )
-  )).then((directory) =>
-    uploadDirectory(title, description, directory).then((id) => {
-      torrentsInfo.set(id, {title, description, directory});
-      console.info(torrentsInfo);
-    })
-  );
+    );
 
 let peer;
 const conns = new Map();
@@ -207,15 +206,20 @@ const handleSend = (info, data) => {
 }
 
 // Initialize user Torrent
-const generateTorrent = (title, description, _files) => {
+const generateTorrent = (title, description, _files, onTorrentCreated) => {
   if (!_files || _files.length === 0) return;
   const files = Array.from(_files);
-  console.log(files);
-  console.log(fileStorage);
-  if (files && files.length >= 0) {
-    createTorrent(title, description, files)
-      .then(() => updateFilesMap(userId));
-  }
+  console.log(files); // Keep the original console.log
+  // Assume fileStorage is available in this scope
+  console.log(fileStorage); // Keep the original console.log
+  
+  createTorrent(title, description, files)
+    .then(torrentId => {
+      updateFilesMap(userId); // Update based on your existing logic
+      if (onTorrentCreated) {
+        onTorrentCreated(torrentId); // Call the callback with the torrent ID
+      }
+    });
 }
 
 const downloadTorrent = (id) =>
