@@ -142,7 +142,7 @@ const getFileHash = (file) =>
 let peer;
 const conns = new Map();
 // Initialize peer user
-const createPeer = (userId=generateRandomString(32)) => {
+const createPeer = (userId=generateRandomString(16)) => {
   console.info(userId);
   peer = new Peer(userId);
   peer.on("open", () => {
